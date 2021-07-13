@@ -18,4 +18,12 @@ class ApplicationController < Sinatra::Base
     
   # end
 
+  get "/teams" do
+    Team.all.to_json
+  end
+
+  get "/players" do
+    Player.all.to_json
+  end
+
 end
