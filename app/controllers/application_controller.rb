@@ -26,4 +26,20 @@ class ApplicationController < Sinatra::Base
     Player.all.to_json
   end
 
+  post "/signup" do
+    signup_params = params.select{|k,v| ["name", "email", "password"].include?(k)}
+    # new_user = User.create(signup_params)
+    # new_user.to_json
+    if User.where(email: params[:email]).exists?
+      signup = false
+      signup.to_json
+    else
+      new_user = User.create(signup_params)
+      new_user.to_json
+    end
+    # binding.pry
+    # params.to_json
+    # binding.pry
+  end
+  #   binding.pry
 end
