@@ -41,5 +41,11 @@ class ApplicationController < Sinatra::Base
     # params.to_json
     # binding.pry
   end
+
+  post "/myteam" do
+    myTeam_params = params.select{|k,v| ["team_id", "user_id"].include?(k)}
+
+  end
+
   #   binding.pry
 end
