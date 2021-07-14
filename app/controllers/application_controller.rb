@@ -28,8 +28,7 @@ class ApplicationController < Sinatra::Base
 
   post "/signup" do
     signup_params = params.select{|k,v| ["name", "email", "password"].include?(k)}
-    # new_user = User.create(signup_params)
-    # new_user.to_json
+
     if User.where(email: params[:email]).exists?
       signup = false
       signup.to_json
@@ -37,8 +36,16 @@ class ApplicationController < Sinatra::Base
       new_user = User.create(signup_params)
       new_user.to_json
     end
-    # binding.pry
-    # params.to_json
+  end
+
+  post "/login" do
+    user = User.where(email: params[:email], password: params[:password])
+    if user.exists?
+      user.to_json
+    else
+      invalid_login = {error: "Invalid email or password", status: false}
+      invalid_login.to_json
+    end
     # binding.pry
   end
 
