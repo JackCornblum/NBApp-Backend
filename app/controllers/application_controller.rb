@@ -63,5 +63,11 @@ class ApplicationController < Sinatra::Base
     UserTeam.all.to_json
   end
 
+  post "/userteam" do
+    myTeam_params = params.select{|k,v| ["team_name", "user_id"].include?(k)}
+    newTeam = UserTeam.create(myTeam_params)
+    newTeam.to_json
+  end
+
   #   binding.pry
 end
