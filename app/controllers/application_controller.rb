@@ -54,9 +54,18 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/myteam" do
-    myTeam_params = params.select{|k,v| ["team_id", "user_id"].include?(k)}
-    newPlayer = MyTeam.create(myTeam_params)
-    newPlayer.to_json
+    user_team_id = params[:user_team_id]
+    myTeam_params = params.select{|k,v| ["user_team_id", "player_id"].include?(k)}
+    if params[:user_team_id] == ""
+      status = false
+      status.to_json
+    else
+      newPlayer = MyTeam.create(myTeam_params)
+      my_team = UserTeam.find(user_team_id).my_teams
+      ids = my_team.map {|p| p[:player_id]}
+      players = ids.map {|id| Player.find(id)}
+      players.to_json
+    end
   end
 
   get "/userteam" do
@@ -64,9 +73,24 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/userteam" do
-    myTeam_params = params.select{|k,v| ["team_name", "user_id"].include?(k)}
-    newTeam = UserTeam.create(myTeam_params)
-    newTeam.to_json
+    user = params[:user_id]
+    user_team_params = params.select{|k,v| ["team_name", "user_id"].include?(k)}
+    if UserTeam.exists?(user_id: user)
+      status = false
+      status.to_json
+    else
+      new_team = UserTeam.create(user_team_params)
+      new_team.to_json
+    end
+  end
+
+  post "/getuserteam" do
+    user_id = params[:user_id]
+    my_team = UserTeam.find_by_user_id(user_id).my_teams
+    ids = my_team.map {|p| p[:player_id]}
+    players = ids.map {|id| Player.find(id)}
+    players.to_json
+    
   end
 
   #   binding.pry
