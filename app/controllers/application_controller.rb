@@ -66,6 +66,7 @@ class ApplicationController < Sinatra::Base
       players = ids.map {|id| Player.find(id)}
       players.to_json
     end
+   
   end
 
   get "/userteam" do
