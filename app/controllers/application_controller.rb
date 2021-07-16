@@ -94,5 +94,22 @@ class ApplicationController < Sinatra::Base
     
   end
 
+  post "/deletemyteam" do
+    if params[:user_team_id] == ""
+      status = false
+      status.to_json
+    else
+    user_team_id = params[:user_team_id]
+    player_id = params[:player_id]
+    my_team = UserTeam.find(user_team_id).my_teams
+    soldPlayer = my_team.find_by(player_id: player_id)
+    soldPlayer.destroy
+
+    ids = my_team.map {|p| p[:player_id]}
+    players = ids.map {|id| Player.find(id)}
+    players.to_json
+    end
+  end
+
   #   binding.pry
 end
