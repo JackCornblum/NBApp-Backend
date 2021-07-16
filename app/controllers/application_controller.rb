@@ -111,5 +111,10 @@ class ApplicationController < Sinatra::Base
     end
   end
 
+  get "/allteams" do
+    all_teams = UserTeam.all.map {|team| team.my_team}
+    all_teams.to_json
+  end
+
   #   binding.pry
 end
